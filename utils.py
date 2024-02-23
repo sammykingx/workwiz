@@ -1,11 +1,9 @@
 from email.message import EmailMessage
-from dotenv import load_dotenv
 import streamlit as st
 import jinja2, json, os, random, smtplib
 
 
-load_dotenv()
-
+MAIL_CONFIG = st.secrets["SMTP_CONFIG"]
 
 @st.cache_resource
 def load_json_file(file_path: str) -> dict:
@@ -27,21 +25,20 @@ def send_email(message, to_addr, subject, attachment=None) -> bool:
     """send email to a user mail addres using tls"""
 
     mail_msg = EmailMessage()
-    load_dotenv()
 
-    mail_msg["from"] = os.getenv("SMTP_MAIL")
+    mail_msg["from"] = MAIL_CONFIG.get("SMTP_MAIL")
     mail_msg["to"] = to_addr
     mail_msg["subject"] = subject
     mail_msg.add_alternative(message, subtype="html")
 
     try:
         with smtplib.SMTP_SSL(
-            os.getenv("SMTP_HOST"), os.getenv("SMTP_PORT"), timeout=5
+            MAIL_CONFIG.get("SMTP_HOST"), MAIL_CONFIG.get("SMTP_PORT"), timeout=5
         ) as mail_server:
             try:
 
                 mail_server.login(
-                    os.getenv("SMTP_MAIL"), os.getenv("SMTP_PWD")
+                    MAIL_CONFIG.get("SMTP_MAIL"), MAIL_CONFIG.get("SMTP_PWD")
                 )
 
                 resp = mail_server.send_message(mail_msg)

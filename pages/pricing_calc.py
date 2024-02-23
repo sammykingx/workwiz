@@ -2,7 +2,6 @@ import streamlit as st
 from models.pricing_calculator import PricingCalculator
 from components import app_sidebar, contact_form, menu_items
 from database import db_connection
-from streamlit_option_menu import option_menu
 import re, time
 import utils
 

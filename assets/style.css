@@ -1,0 +1,34 @@
+/* centralize the image on the creator section */
+.st-emotion-cache-1kyxreq {
+    justify-content: center;
+    /* padding-top: 3rem;
+    padding-bottom: 2rem; */
+}
+
+/* Available tools section button */
+.row-widget.stButton {
+    display: flex;
+    justify-content: center;
+}
+
+/* Hide pages in sidebar */
+.st-emotion-cache-1oe5cao {
+    display: none;
+}
+
+/* add space to selectbox item */
+.st-emotion-cache-1n5xqho {
+    padding: 1rem 1.5rem 6rem;
+    padding-top: 5em;
+}
+
+/* left align home button on sidebar
+.row-widget.stButton {
+    justify-content: left;
+}*/
+
+/* add styling to streamlit menu icons */
+.st-emotion-cache-vzlj5c {
+    margin: 1rem 1.125rem;
+    background-color: #ed9302;
+}

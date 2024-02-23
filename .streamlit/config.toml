@@ -1,0 +1,10 @@
+[server]
+#address = "0.0.0.0"
+#port = 5000
+#runOnSave = true
+
+[theme]
+primaryColor = "#ed9302"
+backgroundColor = "#2e324d"
+secondaryBackgroundColor = "#444759"
+textColor = "#fff"

@@ -1,0 +1,194 @@
+import streamlit as st
+from models.pricing_calculator import PricingCalculator
+from components import menu_items
+import re, time
+import utils
+
+
+USERS = ("sammy@sammykingx.com.ng", "workwiz@sammykingx.com.ng")
+EMAIL_PATTERN = re.compile(r"^[a-zA-Z0-9._-]+@[a-z]+\.[a-z]{2,}$")
+PASSCODE_PATTERN = re.compile(r"^[0-9]{5}$")
+
+def render() -> None:
+    """renders content"""
+
+    menu_items.render()
+    st.subheader(":smiley: Cost Estimation now stressfree.", anchor=False)
+    st.title(":control_knobs: Project Cost Estimator", anchor=False)
+    st.write(
+        """
+            - As a tech freelancer, accurately estimating project budgets is 
+            critical to achieving profitability and long-term success. 
+
+            - :orange[WorkWiz] helps freelancers in estimating project costs by 
+            factoring in variables such as project timeline, developer experience, 
+            skill level, project complexity, inflation, etc. Thereby fostering data-driven 
+            decision-making and strategic planning.
+        """
+    )
+
+    "#"
+
+    video_col, login_col = st.columns(2, gap="large")
+
+    if "is_verified" not in st.session_state:
+        with video_col:
+            "#"
+            st.header("workwiz verification demo", anchor=False)
+            st.video("https://youtu.be/wgRycYz0AIc?si=a2JayJBjEcEC9xH0")
+
+        with login_col:
+            "#"
+            st.subheader("Help us protect :orange[workwiz] from bots")
+            user_email = st.text_input(
+                    ":email: __Enter email__",
+                    help="Enter a valid email address to get passcode",
+                    placeholder = "sammykingx@gmail.com",
+                )
+
+            if user_email:
+                if not EMAIL_PATTERN.match(user_email):
+                    st.error("Invalid email provided")
+                    st.stop()
+
+                if "user_email" not in st.session_state:
+                    st.session_state["user_email"] = user_email
+                    st.session_state["user_otp"] = str(utils.get_otp())
+
+                    with st.spinner("sending passcode to email"):
+                        # send email
+                        time.sleep(7)
+
+                st.write(f"Passcode = {st.session_state['user_otp']}")
+                st.success(f"Passcode sent to {user_email}, check your email")
+
+                email_passcode = st.text_input(
+                        "__Enter Passcode__",
+                        help="Enter most recent passcode sent to your email",
+                        placeholder="94567",
+                    )
+
+                if email_passcode:
+                    if email_passcode != st.session_state["user_otp"]:
+                        st.error("Invalid Passcode", icon = "💔")
+                        st.stop()
+
+                    else:
+                        st.session_state["is_verified"] = True
+                        del st.session_state["user_email"]
+                        del st.session_state["user_otp"]
+                        st.info(f":white_check_mark: Verified")
+                        st.rerun()
+        "#"
+
+    else:
+        st.session_state["is_verified"] = True
+        st.header(":smiley: You're in")
+
+    st.write("it is finished")
+
+
+def display_calculator() -> None:
+    with st.container():
+        col1, col2, col3 = st.columns(3)
+
+        with col1:
+            st.subheader("Let's talk about you first :smiley:", anchor=False)
+
+            skill_level = st.selectbox(
+                    "Your skill Proficeincy",
+                   options = ("Beginner", "Junior", "Intermediate", "Advanced"),
+                    index = 1,
+                )
+
+            if skill_level == "Beginner":
+                st.error(
+                    "You should focus on learning the basics before taking projects",
+                    icon = "💝")
+                st.exception(RuntimeError("choose another option"))
+                st.stop()
+
+            project_experience = st.radio(
+                    "Project Proficiency",
+                    options = ("Small", "Standard", "Enterpise_Level"),
+                    help = "What type of application have you built",
+                )
+
+        with col2:
+            st.subheader("Let's know the project scope :mag:", anchor=False)
+            complexity_level = st.selectbox(
+                    "Complexity level",
+                    placeholder="select from dropdwon",
+                    options =  ("Easy", "Standard", "Hard"),
+                )
+
+            timeline = st.slider(
+                    "What's the project timeline in weeks?",
+                    min_value = 2,
+                    max_value = 52,
+                )
+
+            st.success(f"you selected {timeline} weeks")
+
+        with col3:
+            available_currency = {
+                    "NGN": "₦",
+                    "USD": "$",
+                    "GBP": "£",
+                    "EUR": "€",
+                }
+            st.subheader("Let's talk cost :moneybag:", anchor=False)
+            currency_choice = st.selectbox(
+                    "Choose the currency",
+                    options = list(available_currency.keys()),
+                    index  = 1,
+                    placeholder = "choose currency")
+
+            project_cost = st.number_input(
+                    "What's the market cost",
+                    min_value = 150.00,
+                    step = None,
+                    placeholder="estimated project worth",
+                    help="enter price cost based on the project value and timeline")
+
+            st.success(f"{currency_choice} {project_cost}")
+
+    # cost calculation
+    project_estimator = PricingCalculator(
+            skill_level.lower(), project_cost, (timeline * 7)
+        )
+
+    project_estimator.increase_rate(
+            project_experience.lower(), complexity_level.lower(),
+        )
+
+    estimated_cost = project_estimator.calculate()
+    st.title(
+            f":orange[Estimate] = :green[{available_currency[currency_choice]} "
+            f"{estimated_cost}]",
+            anchor = False,
+        )
+    "#"
+
+    st.write(project_estimator)
+
+    st.info(":ok_hand: still cooking here")
+    if st.button(":house: Home", help="Return to home"):
+        st.switch_page("main.py")
+
+
+if __name__ == "__main__":
+    st.set_page_config(
+        page_title="WorkWiz - Pricing Calculator",
+        page_icon=":star:",
+        layout="wide",
+        initial_sidebar_state="collapsed",
+    )
+
+    with open("assets/style.css", "r") as css_file:
+        st.markdown(
+            f"<style>{css_file.read()}</style>",
+            unsafe_allow_html=True,
+        )
+
+    render()

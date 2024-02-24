@@ -22,13 +22,19 @@
     padding-top: 5em;
 }
 
-/* left align home button on sidebar
-.row-widget.stButton {
-    justify-content: left;
-}*/
-
 /* add styling to streamlit menu icons */
 .st-emotion-cache-vzlj5c {
     margin: 1rem 1.125rem;
     background-color: #ed9302;
+}
+
+/* add padding and color to header bar*/
+.st-emotion-cache-1hkedlk {
+    padding-bottom: 5em;
+    background: rgb(52, 56, 86);
+}
+
+/* remove the fork repo icon */
+.st-emotion-cache-1sq6h04 {
+    display: none;
 }

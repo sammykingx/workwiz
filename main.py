@@ -14,7 +14,7 @@ def main() -> None:
 
     # page body
     st.subheader(
-        ":fire: say hello to your secret weapon",
+        ":fire: Ready to step up...",
         anchor=False,
     )
 
@@ -33,7 +33,7 @@ def main() -> None:
             st_lottie(animation, height=500)
 
         with col2:
-            "##"
+            "#"
 
             st.subheader(
                 ":smiley: Easy to use project estimator",
@@ -92,6 +92,7 @@ def main() -> None:
         animation = utils.load_json_file(
             "assets/animations/cost_animation.json"
         )
+
         st_lottie(animation, height=300)
         st.markdown(
             "<h3 style='text-align: center'>Cost Calculator</h3>",
@@ -136,12 +137,6 @@ def main() -> None:
         "#"
 
     "---"
-
-    # about creator section
-    # st.markdown(
-    #    "<h2 style='text-align: center'>Meet The Creator</h2>",
-    #    unsafe_allow_html=True,
-    # )
 
     st.image("./assets/images/sammykingx.png", width=200)
     st.markdown(

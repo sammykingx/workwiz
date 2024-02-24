@@ -25,7 +25,7 @@ class PricingCalculator:
     def __init__(
         self, skill_level: str, market_cost: float, timeline: int
     ):
-        self.project_timeline = timeline + self._extra_days
+        self.project_timeline = timeline + PricingCalculator._extra_days
         if timeline > 31:
             market_cost += market_cost * 0.3
             self.base_rate = (market_cost / self.project_timeline) + (
@@ -36,8 +36,9 @@ class PricingCalculator:
             self.base_rate = market_cost / self.project_timeline
 
         self.gig_rate = self.base_rate + (
-            self.base_rate * self._skill_proficiency[skill_level]
+            self.base_rate * PricingCalculator._skill_proficiency[skill_level]
         )
+
         self.skill_level = skill_level
         self.project_cost = 0.0
 
@@ -45,10 +46,10 @@ class PricingCalculator:
         """increase gig rate based on project complexity and experience level"""
 
         self.experience_rate = (
-            self.gig_rate * self._project_experience[experience]
+            self.gig_rate * PricingCalculator._project_experience[experience]
         )
         self.complexity_rate = (
-            self.gig_rate * self._project_level[complexity]
+            self.gig_rate * PricingCalculator._project_level[complexity]
         )
         self.gig_rate = (
             self.gig_rate
@@ -66,7 +67,7 @@ class PricingCalculator:
 
         return round(self.project_cost)
 
-    """
+
     def __str__(self):
         return "{}, {}, {}".format(
                 self.skill_level.capitalize(),
@@ -74,4 +75,3 @@ class PricingCalculator:
                 self.project_cost,
                 self.project_timeline,
             )
-    """

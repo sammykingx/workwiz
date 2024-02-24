@@ -32,7 +32,7 @@ def render() -> None:
 
                         resp = utils.send_email(
                             msg,
-                            "sammy@sammykingx.com.ng",
+                            st.secrets["CONTACT_EMAIL"],
                             "FEATURE REQUEST - workwiz",
                         )
 

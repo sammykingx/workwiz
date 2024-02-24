@@ -7,8 +7,6 @@ import utils
 
 
 EMAIL_PATTERN = re.compile(r"^[a-zA-Z0-9._-]+@[a-z]+\.[a-z]{2,}$")
-USERS = ["sam@sam.co", "me@samm.com"]
-
 
 def render() -> None:
     """renders content"""
@@ -20,9 +18,9 @@ def render() -> None:
 
     # --- render page content ---
     st.subheader(
-        ":smiley: Cost Estimation now stressfree.", anchor=False
+        ":smiley: Built with you in mind.", anchor=False
     )
-    st.title(":control_knobs: Project Cost Estimator", anchor=False)
+    st.title(":control_knobs: Your Cost Estimator", anchor=False)
     st.write(
         """
             - As a tech freelancer, accurately estimating project budgets is 
@@ -52,16 +50,10 @@ def render() -> None:
                 st.video("https://youtu.be/qgyYAkLJsTE")
 
         with login_col:
-            # "#"
             st.subheader(
                 "Help us protect :orange[workwiz] from bots",
                 anchor=False,
             )
-            # user_email = st.text_input(
-            #        ":email: __Enter email__",
-            #        help="Enter a valid email address to get passcode",
-            #        placeholder = "sammykingx@gmail.com",
-            #    )
 
             if "user_email" not in st.session_state:
                 user_email = st.text_input(
@@ -78,7 +70,7 @@ def render() -> None:
                     verified_email = collection.find_one(
                         {"email": user_email}
                     )
-                    # if user_email in USERS:
+
                     if verified_email:
                         st.session_state["is_verified"] = True
                         st.info(f":white_check_mark: Verified")
@@ -100,21 +92,12 @@ def render() -> None:
                             user_otp=st.session_state["user_otp"],
                         )
 
-                        # msg = utils.load_email_template(
-                        #        "email_verification.html",
-                        #        user_otp=st.session_state["user_otp"]
-                        #    )
-                        # resp = utils.send_email(
-                        #        msg,
-                        #        st.session_state["user_email"],
-                        #        "Email OTP Verification - Action Required")
                     if not resp:
                         st.stop()
 
                     st.session_state["otp_sent"] = True
 
             if "user_email" in st.session_state:
-                # st.write(f"Passcode = {st.session_state['user_otp']}")
                 st.success(
                     f"Passcode sent to {st.session_state['user_email']}, check your email"
                 )
@@ -128,14 +111,7 @@ def render() -> None:
                                 st.session_state["user_email"],
                                 user_otp=st.session_state["user_otp"],
                             )
-                            # msg = utils.load_email_template(
-                            #        "email_verification.html",
-                            #        user_otp=st.session_state["user_otp"]
-                            #    )
-                            # resp = utils.send_email(
-                            #        msg,
-                            #        st.session_state["user_email"],
-                            #        "Email OTP Verification - Action Required")
+
                         if not resp:
                             st.stop()
 
@@ -156,7 +132,7 @@ def render() -> None:
                         collection.insert_one(
                             {"email": st.session_state["user_email"]}
                         )
-                        # USERS.append(st.session_state["user_email"])
+
                         st.session_state["is_verified"] = True
                         del st.session_state["user_email"]
                         del st.session_state["user_otp"]
@@ -168,17 +144,6 @@ def render() -> None:
 
     else:
         render_calculator()
-        # st.toast("Congratulations", icon="🎉")
-        # selected = option_menu(
-        #        menu_title = "Next Up",
-        #        options = ["Donate", "Share", "Home"],
-        #        icons = ["cup-hot", "share", "house"],
-        #        menu_icon = "emoji-smile",
-        #        orientation = "horizontal",
-        #    )
-
-        # if selected == "Home":
-        #    st.switch_page("main.py")
 
 
 def render_calculator() -> None:
@@ -287,7 +252,6 @@ if __name__ == "__main__":
 
     db = db_connection().get_database("workwiz_app")
     collection = db.get_collection("users")
-    # st.write(list(collection.find()))
 
     with open("assets/style.css", "r") as css_file:
         st.markdown(
